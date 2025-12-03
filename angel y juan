@@ -1,0 +1,227 @@
+<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+<script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	createChat({
+	webhookUrl:'https://angelneira.app.n8n.cloud/webhook/828dfeba-25b4-4d79-98e5-5437d1104485/chat'
+	});
+</script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ecommerce Videojuegos - Eingel y Juanma</title>
+
+<style>
+/* ======== PALETA GAMER ========
+   Negro #0a0a0a
+   Verde neón #00ff9f
+   Morado #7d2ae8
+   Gris oscuro #1a1a1a
+   =============================== */
+
+body {
+  font-family: 'Orbitron', sans-serif;
+  background-color: #0a0a0a;
+  color: #e6e6e6;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  color: #00ff9f;
+  text-shadow: 0 0 8px #00ff9f;
+}
+
+/* Productos */
+.producto {
+  border: 2px solid #7d2ae8;
+  background: #1a1a1a;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 12px;
+  display: inline-block;
+  width: 240px;
+  vertical-align: top;
+  box-shadow: 0 0 10px #7d2ae8;
+}
+
+.producto img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.producto button {
+  background-color: #00ff9f;
+  border: none;
+  color: #0a0a0a;
+  padding: 10px;
+  margin-top: 6px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 0 8px #00ff9f;
+}
+
+.producto button:hover {
+  background-color: #7d2ae8;
+  color: white;
+  box-shadow: 0 0 12px #7d2ae8;
+}
+
+/* Carrito */
+.carrito {
+  margin-top: 30px;
+  padding: 20px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  display: inline-block;
+  width: 350px;
+  text-align: left;
+  border: 2px solid #00ff9f;
+  box-shadow: 0 0 10px #00ff9f;
+}
+
+.carrito button {
+  background-color: #7d2ae8;
+  border: none;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.carrito button:hover {
+  background-color: #00ff9f;
+  color: black;
+  box-shadow: 0 0 12px #00ff9f;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+</style>
+</head>
+<body>
+
+<h1>🎮 Ecommerce Videojuegos - Eingel y Juanma</h1>
+
+<div id="productos"></div>
+
+<div class="carrito">
+  <h2>🧾 Carrito de Compras</h2>
+  <ul id="lista-carrito"></ul>
+  <p><strong>Total: $<span id="total">0.00</span></strong></p>
+  <button onclick="vaciarCarrito()">🗑️ Vaciar Carrito</button>
+</div>
+
+<script>
+/* ======================
+      PRODUCTOS
+   ====================== */
+const productos = [
+  {
+    id: 1,
+    nombre: "GTA V",
+    precio: 75.00,
+    imagen: "https://panamericana.vtexassets.com/arquivos/ids/435966/juego-grand-theft-auto-v-ps5-710425578687.jpg?v=637859699378630000"
+  },
+  {
+    id: 2,
+    nombre: "Red Dead Redemption 2",
+    precio: 70.00,
+    imagen: "https://image.api.playstation.com/cdn/UP1004/CUSA03041_00/Hpl5MtwQgOVF9vJqlfui6SDB5Jl4oBSq.png"
+  },
+  {
+    id: 3,
+    nombre: "Hollow Knight Silksong",
+    precio: 80.00,
+    imagen: "https://nintenduo.com/wp-content/uploads/2025/06/Hollow-Knight-Silksong-destacada-1080x1080.webp"
+  },
+  {
+    id: 4,
+    nombre: "FC 26",
+    precio: 108.00,
+    imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM-L20rEnQhBa46sBVar_o7c58owd59NsWAw&s"
+  },
+  {
+    id: 5,
+    nombre: "God Of War Ragnarok",
+    precio: 80.00,
+    imagen: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2322010/capsule_616x353.jpg?t=1750909504"
+  }
+];
+
+let carrito = [];
+
+/* ======================
+      MOSTRAR PRODUCTOS
+   ====================== */
+const contenedor = document.getElementById("productos");
+
+productos.forEach(prod => {
+  let card = document.createElement("div");
+  card.classList.add("producto");
+
+  card.innerHTML = `
+    <img src="${prod.imagen}">
+    <h3>${prod.nombre}</h3>
+    <p><strong>$${prod.precio.toFixed(2)}</strong></p>
+    <button onclick="agregarCarrito(${prod.id})">Agregar al Carrito</button>
+  `;
+
+  contenedor.appendChild(card);
+});
+
+/* ======================
+        CARRITO
+   ====================== */
+
+function agregarCarrito(id) {
+  const producto = productos.find(p => p.id === id);
+  carrito.push(producto);
+  actualizarCarrito();
+}
+
+function vaciarCarrito() {
+  carrito = [];
+  actualizarCarrito();
+}
+
+function actualizarCarrito() {
+  const lista = document.getElementById("lista-carrito");
+  const totalTxt = document.getElementById("total");
+
+  lista.innerHTML = "";
+
+  carrito.forEach((p, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `${p.nombre} - $${p.precio.toFixed(2)} 
+      <button onclick="eliminar(${i})" style="margin-left:10px;">❌</button>`;
+    lista.appendChild(li);
+  });
+
+  const total = carrito.reduce((acc, item) => acc + item.precio, 0);
+  totalTxt.textContent = total.toFixed(2);
+}
+
+function eliminar(index) {
+  carrito.splice(index, 1);
+  actualizarCarrito();
+}
+</script>
+
+</body>
+</html>
